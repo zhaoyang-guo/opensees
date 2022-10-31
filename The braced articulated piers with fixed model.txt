@@ -1,0 +1,473 @@
+#单位 m，N，kg，s
+# 1）定义模型维数和其他参数
+wipe;
+model basic -ndm 3 -ndf 6
+puts "restraint"
+set PI [expr 2*asin(1.0)];
+if {[file exists output_ychui==0]} {
+    file mkdir output_ychui;
+}
+
+   
+node	1	23.39836879	  14.60202752	-7.7
+node	2	23.39836879	  15.15202752	-7.7
+node	3	23.39836879   15.70202752	-7.7
+node	4	23.39836879	  16.45202752	-7.7
+node	5	23.39836879	  17.20202752	-7.7
+node	6	23.39836879	  17.95202752	-7.7
+node	7	23.39836879	  18.70202752	-7.7
+node	8	23.39836879	  19.25202752	-7.7
+node	9	23.39836879	  19.80202752	-7.7
+node	10	23.39836879	  17.20202752	-7.2
+node	11	23.39836879	  17.20202752	-6.7
+node	12	23.39836879	  17.20202752	-6.2
+node	13	23.39836879	  17.20202752	-5.7
+node	14	23.39836879	  17.20202752	-5.2
+node	15	23.39836879	  17.20202752	-4.7
+node	16	23.39836879	  16.94488467	-4.271428571
+node	17	23.39836879	  16.68774181	-3.842857143
+node	18	23.39836879	  16.43059895	-3.414285714
+node	19	23.39836879	  16.1734561	-2.985714286
+node	20	23.39836879	  15.91631324	-2.557142857
+node	21	23.39836879	  15.65917038	-2.128571429
+node	22	23.39836879	  15.40202752	-1.7
+node	23	23.39836879	  17.45917038	-4.271428571
+node	24	23.39836879	  17.71631324	-3.842857143
+node	25	23.39836879	  17.9734561	-3.414285714
+node	26	23.39836879	  18.23059895	-2.985714286
+node	27	23.39836879	  18.48774181	-2.557142857
+node	28	23.39836879	  18.74488467	-2.128571429
+node	29	23.39836879	  19.00202752	-1.7
+#node	30	23.39836879	  15.40202752	-1.5
+#node	31	23.39836879	  19.00202752	-1.5
+node	32	23.39836879	  17.20202752	-1.15
+node	33	23.39836879	  19.00202752	-1.15
+node	34	23.39836879	  15.40202752	-1.15
+#node	35	23.39836879	  19.50202752	-0.95
+#node	36	23.39836879	  14.90202752	-0.95
+
+
+
+
+
+geomTransf PDelta 1 0 0 1;#杆件为纵桥向
+geomTransf PDelta 2 0 0 1;#杆件为横桥向
+geomTransf PDelta 3 1 0 0;#杆件为竖向
+geomTransf PDelta 4 0.857492 0.514495 0;
+geomTransf PDelta 5 0.857492 -0.51449 0;
+
+
+#桥墩肢端截面
+set A1 6.810131e-002; #面积    
+set E1 2.06e+011; #弹性模量
+set G1 [expr $E1/(2*(1+0.2))]; #剪切模量 
+set J1  4.197580e-003; #I    
+set Iy1 2.033683e-003; #Iy    
+set Iz1 2.033683e-003; #Iz
+
+#桥墩底部截面
+set A2 1.619953e-001; #面积    
+set E2 2.06e+011; #弹性模量
+set G2 [expr $E2/(2*(1+0.2))]; #剪切模量 
+set J2 2.625524e-002; #I    
+set Iy2 1.257842e-002; #Iy    
+set Iz2 1.257842e-002; #Iz
+
+
+#拉杆截面
+set A3 7.853982e-003; #面积    
+set E3 2.0600e+011; #弹性模量
+set G3 [expr $E3/(2*(1+0.2))]; #剪切模量 
+set J3 9.817477e-006; #I    
+set Iy3 4.908739e-006; #Iy    
+set Iz3 4.908739e-006; #Iz
+
+
+#虚拟横梁
+set A5 7.853982e-003; #面积    
+set E5 2.0600e+015; #弹性模量
+set G5 [expr $E5/(2*(1+0.2))]; #剪切模量 
+set J5 9.817477e-006; #I    
+set Iy5 4.908739e-006; #Iy    
+set Iz5 4.908739e-006; #Iz
+
+
+
+#承台截面
+set A4 3.9600e-000; #面积   
+set E4 3.1500e+010; #弹性模量
+set G4 [expr $E4/(2*(1+0.2))]; # 剪切模量
+set J4 2.154628e+000; #I   
+set Iy4 1.0692e-000; #Iy    
+set Iz4 1.5972e-000; #
+
+
+
+#桥墩肢端单元
+#element elasticBeamColumn 单元编号 i节点 j节点 截面面积 弹性模量 剪切模量 截面扭转惯性矩 截面y轴惯性矩 截面z轴惯性矩 局部坐标轴
+#element	elasticBeamColumn	16	15	16	$A1	$E1	$G1	$J1	$Iy1	$Iz1	2
+#element	elasticBeamColumn	17	16	17	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	18	17	18	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	19	18	19	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	20	19	20	$A1	$E1	$G1	$J1	$Iy1	$Iz1	2
+#element	elasticBeamColumn	21	20	21	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	22	21	22	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	23	15	23	$A1	$E1	$G1	$J1	$Iy1	$Iz1	2
+#element	elasticBeamColumn	24	23	24	$A1	$E1	$G1	$J1	$Iy1	$Iz1	2
+#element	elasticBeamColumn	25	24	25	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	26	25	26	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	27	26	27	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	28	27	28	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+#element	elasticBeamColumn	29	28	29	$A1	$E1	$G1	$J1	$Iy1	$Iz1 	2
+
+
+#桥墩底部单元
+#element elasticBeamColumn 单元编号 i节点 j节点 截面面积 弹性模量 剪切模量 截面扭转惯性矩 截面y轴惯性矩 截面z轴惯性矩 局部坐标轴
+#element	elasticBeamColumn	10	5	10	$A2	$E2	$G2	$J2	$Iy2	$Iz2 	2
+#element	elasticBeamColumn	11	10	11	$A2	$E2	$G2	$J2	$Iy2	$Iz2 	2
+#element	elasticBeamColumn	12	11	12	$A2	$E2	$G2	$J2	$Iy2	$Iz2  	2
+#element	elasticBeamColumn	13	12	13	$A2	$E2	$G2	$J2	$Iy2	$Iz2  	2
+#element	elasticBeamColumn	14	13	14	$A2	$E2	$G2	$J2	$Iy2	$Iz2  	2
+#element	elasticBeamColumn	15	14	15	$A2	$E2	$G2	$J2	$Iy2	$Iz2  	2
+
+
+#拉杆单元
+#element elasticBeamColumn 单元编号 i节点 j节点 截面面积 弹性模量 剪切模量 截面扭转惯性矩 截面y轴惯性矩 截面z轴惯性矩 局部坐标轴
+element	elasticBeamColumn	29	29	22	$A3	$E3	$G3	$J3	$Iy3	$Iz3	2
+
+#虚拟横梁
+element	elasticBeamColumn	30	32	34	$A5	$E5	$G5	$J5	$Iy5	$Iz5	2
+#element	elasticBeamColumn	31	34	36	$A3	$E3	$G3	$J3	$Iy3	$Iz3	2
+element	elasticBeamColumn	32	32	33	$A5	$E5	$G5	$J5	$Iy5	$Iz5	2
+#element	elasticBeamColumn	33	33	35	$A3	$E3	$G3	$J3	$Iy3	$Iz3	2
+
+
+#承台单元
+#element elasticBeamColumn 单元编号 i节点 j节点 截面面积 弹性模量 剪切模量 截面扭转惯性矩 截面y轴惯性矩 截面z轴惯性矩 局部坐标轴
+element	elasticBeamColumn	1	2	1	$A4	$E4	$G4	$J4	$Iy4	$Iz4 	2
+element	elasticBeamColumn	2	3	2	$A4	$E4	$G4	$J4	$Iy4	$Iz4 	2
+element	elasticBeamColumn	3	4	3	$A4	$E4	$G4	$J4	$Iy4	$Iz4  	2
+element	elasticBeamColumn	4	5	4	$A4	$E4	$G4	$J4	$Iy4	$Iz4  	2
+element	elasticBeamColumn	5	6	5	$A4	$E4	$G4	$J4	$Iy4	$Iz4  	2
+element	elasticBeamColumn	6	7	6	$A4	$E4	$G4	$J4	$Iy4	$Iz4  	2
+element	elasticBeamColumn	7	8	7	$A4	$E4	$G4	$J4	$Iy4	$Iz4  	2
+element	elasticBeamColumn	8	9	8	$A4	$E4	$G4	$J4	$Iy4	$Iz4  	2
+
+
+set hnt 40000000
+#混凝土轴向抗压强度标准值
+set  fck  2.68e7
+
+#以下为定义核心混凝土
+#约束混凝土轴心抗压强度标准值（强度）
+set fpc1   -4.733e7
+#约束混凝土抗压峰值应变
+set epsc1  -0.00966
+#约束混凝土极限强度
+set fpcu1  [expr 0.2*$fpc1]
+#约束混凝土极限应变
+set epscu1 -0.025
+#约束混凝土峰值抗拉强度
+set ft1    [expr -0.1*$fpc1]
+set Ets    [expr $fck/0.002]
+set lambda  0.1
+
+#以下为定义核心混凝土
+#约束混凝土轴心抗压强度标准值（强度）
+set fpc2  -3.9247e7
+#约束混凝土抗压峰值应变
+set epsc2  -0.00664
+#约束混凝土极限强度
+set fpcu2  [expr 0.2*$fpc2]
+#约束混凝土极限应变
+set epscu2 -0.025
+#约束混凝土峰值抗拉强度
+set ft2    [expr -0.1*$fpc2]
+
+
+#钢材参数
+#钢材屈服强度
+set Fy    3.45e8
+#钢材弹性模量
+set E     2.06e11
+set b     0.01
+set R0    18
+set cR1   0.925
+set cR2   0.15
+
+uniaxialMaterial Concrete02 1 $fpc1 $epsc1 $fpcu1 $epscu1 $lambda $ft1 $Ets;#分叉核心混凝土
+uniaxialMaterial Steel02    2 $Fy $E $b $R0 $cR1 $cR2 
+
+uniaxialMaterial Concrete02 3 $fpc2 $epsc2 $fpcu2 $epscu2 $lambda $ft2 $Ets;#墩底核心混凝土
+
+
+#分叉截面
+#纤维截面划分
+section fiberSec 1  {
+#   patch circ  材料编号 切向划分纤维数 法向划分纤维数 圆形坐标 内圆半径 外圆半径 起始角度 结束角度;
+	patch circ  1        30            30            0 0      0        0.284    0        360;		
+	patch circ  2        30            2             0 0      0.284    0.3      0        360;	
+};  
+
+set Ubig 1e20
+set Usmall  [expr 1/$Ubig]
+
+uniaxialMaterial Elastic  4  6.61e8
+uniaxialMaterial Elastic  5  $Ubig
+section Aggregator 2 4 Vy 4 Vz 5 T -section 1;#分叉
+
+#element dispBeamColumn 单元编号 i节点 j节点 积分点 截面号 局部坐标轴
+element	dispBeamColumn	15	15	16	3  2  4
+element	dispBeamColumn	16	16	17	3  2  4
+element	dispBeamColumn	17	17	18	3  2  4
+element	dispBeamColumn	18	18	19	3  2  4
+element	dispBeamColumn	19	19	20	3  2  4
+element	dispBeamColumn	20	20	21	3  2  4
+element	dispBeamColumn	21	21	22	3  2  4
+element	dispBeamColumn	22	15	23	3  2  5
+element	dispBeamColumn	23	23	24	3  2  5
+element	dispBeamColumn	24	24	25	3  2  5
+element	dispBeamColumn	25	25	26	3  2  5
+element	dispBeamColumn	26	26	27	3  2  5
+element	dispBeamColumn	27	27	28	3  2  5
+element	dispBeamColumn	28	28	29  3  2  5
+
+#墩底截面
+section fiberSec 3  {
+#   patch circ  材料编号 切向划分纤维数 法向划分纤维数 圆形坐标 内圆半径 外圆半径 起始角度 结束角度;
+	patch circ  3        40            40             0 0      0        0.484    0        360;		
+	patch circ  2        40            2              0 0      0.484    0.5      0        360;	
+};  
+
+uniaxialMaterial Elastic  6  1.12e9
+section Aggregator 4 6 Vy 6 Vz 5 T -section 3;#主墩
+
+#element dispBeamColumn 单元编号 i节点 j节点 积分点 截面号 局部坐标轴
+element	dispBeamColumn	9	5	10	3  4  3
+element	dispBeamColumn	10	10	11	3  4  3
+element	dispBeamColumn	11	11	12	3  4  3
+element	dispBeamColumn	12	12	13	3  4  3
+element	dispBeamColumn	13	13	14	3  4  3
+element	dispBeamColumn	14	14	15	3  4  3
+
+
+
+#定义刚臂
+#rigidLink beam 32 33
+#rigidLink beam 32 34
+#rigidLink beam 29 31
+#rigidLink beam 22 30
+
+#墩底固结
+fix	5	1 1 1 1 1 1
+fix	7	1 1 1 1 1 1
+
+#定义支座
+uniaxialMaterial Elastic  7  1.64e11
+uniaxialMaterial Elastic  8  1.64e11
+uniaxialMaterial Elastic  9  1.64e11
+
+element zeroLength 34 29 33 -mat 7 9 9 8 8 8 -dir 1 2 3 4 5 6 -orient 0 0 1 0 1 0 
+element zeroLength 35 22 34 -mat 7 9 9 8 8 8 -dir 1 2 3 4 5 6 -orient 0 0 1 0 1 0
+
+#element elastomericBearingPlasticity $eleTag $iNode $jNode $kInit $qd $alpha1 $alpha2 $mu -P $matTag -Mz $matTag
+#element elastomericBearingPlasticity 155 72 160 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearingPlasticity 156 73 161 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearingPlasticity 157 94 162 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearingPlasticity 158 95 163 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearingPlasticity 159 116 164 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearingPlasticity 160 117 165 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearingPlasticity 161 138 166 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearingPlasticity 162 139 167 2.18e7 1.266e5 0.156 0 3.0 -P 5 -T 6 -My 6 -Mz 6
+
+#element elastomericBearing 155 72 160  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearing 156 73 161  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearing 157 94 162  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearing 158 95 163  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearing 159 116 164  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearing 160 117 165  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearing 161 138 166  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+#element elastomericBearing 162 139 167  6.2e6 51179 0.161 -P 5 -T 6 -My 6 -Mz 6
+
+# 4）定义荷载类型
+pattern Plain 1 Linear {
+eleLoad	-ele	1 	-type	-beamUniform	0	54450	0
+eleLoad	-ele	2 	-type	-beamUniform	0	54450	0
+eleLoad	-ele	3 	-type	-beamUniform	0	74250	0
+eleLoad	-ele	4 	-type	-beamUniform	0	74250	0
+eleLoad	-ele	5 	-type	-beamUniform	0	74250	0
+eleLoad	-ele	6 	-type	-beamUniform	0	74250	0
+eleLoad	-ele	7 	-type	-beamUniform	0	54450	0
+eleLoad	-ele	8 	-type	-beamUniform	0	54450	0
+
+
+eleLoad	-ele	9 	-type	-beamUniform	0	0	11103.0
+eleLoad	-ele	10 	-type	-beamUniform	0	0	11103.0
+eleLoad	-ele	11 	-type	-beamUniform	0	0	11103.0
+eleLoad	-ele	12 	-type	-beamUniform	0	0	11103.0
+eleLoad	-ele	13 	-type	-beamUniform	0	0	11103.0
+eleLoad	-ele	14 	-type	-beamUniform	0	0	11103.0
+
+
+eleLoad	-ele	15 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	16 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	17 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	18 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	19 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	20 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	21 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	22 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	23 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	24 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	25 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	26 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	27 	-type	-beamUniform	0	0	4295.47
+eleLoad	-ele	28 	-type	-beamUniform	0	0	4295.47
+
+
+eleLoad	-ele	29 	-type	-beamUniform	0	2219.54	0
+}
+
+
+pattern Plain 2 Linear {
+load 34 0 0 -1545000 0 0 0
+load 33 0 0 -1545000 0 0 0
+}
+
+
+
+# 3）定义数据记录文本
+
+
+recorder Node -file output_ychui/node22.txt -time -node 22 -dof 1 2 3 disp; 
+recorder Node -file output_ychui/node32.txt -time -node 32 -dof 1 2 3 disp; 
+recorder Element -file output_ychui/globalForce_5.txt -time -ele  globalForce
+
+
+puts "gravity"
+## Load Case = DEAD
+puts "analysis"
+constraints Plain
+numberer Plain
+system BandGeneral
+test EnergyIncr 1.0e-6 200
+algorithm Newton
+integrator LoadControl 0.5
+analysis Static
+analyze 10
+loadConst -time 0.0
+puts "pushover"
+
+
+
+loadConst -time 0.0
+## Load Case = PUSH
+puts "pushover"
+
+
+
+pattern Plain 3 Linear {
+load 32 0 1000 0.000E+000 0.000E+000 0.000E+000 0.000E+000
+} 
+
+puts "analysis"
+constraints Plain 
+numberer RCM
+system UmfPack
+test NormDispIncr  1.0e1 200
+algorithm Newton
+analysis Static 
+
+
+integrator DisplacementControl 32 2 0.0002
+analyze 100
+integrator DisplacementControl 32 2 -0.0004
+analyze 100
+integrator DisplacementControl 32 2 0.0006
+analyze 100
+integrator DisplacementControl 32 2 -0.0008
+analyze 100
+integrator DisplacementControl 32 2 0.0010
+analyze 100
+integrator DisplacementControl 32 2 -0.0012
+analyze 100
+integrator DisplacementControl 32 2 0.0014
+analyze 100
+integrator DisplacementControl 32 2 -0.0016
+analyze 100
+
+integrator DisplacementControl 32 2 0.0018
+analyze 100
+integrator DisplacementControl 32 2 -0.0020
+analyze 100
+integrator DisplacementControl 32 2 0.0022
+analyze 100
+integrator DisplacementControl 32 2 -0.0024
+analyze 100
+integrator DisplacementControl 32 2 0.0026
+analyze 100
+
+integrator DisplacementControl 32 2 -0.0028
+analyze 100
+integrator DisplacementControl 32 2 0.0030
+analyze 100
+integrator DisplacementControl 32 2 -0.0032
+analyze 100
+integrator DisplacementControl 32 2 0.0034
+analyze 100
+integrator DisplacementControl 32 2 -0.0036
+analyze 100
+integrator DisplacementControl 32 2 0.0038
+analyze 100
+integrator DisplacementControl 32 2 -0.0040
+analyze 100
+
+integrator DisplacementControl 32 2 0.0042
+analyze 100
+integrator DisplacementControl 32 2 -0.0044
+analyze 100
+integrator DisplacementControl 32 2 0.0046
+analyze 100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
